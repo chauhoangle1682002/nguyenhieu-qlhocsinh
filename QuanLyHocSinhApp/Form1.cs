@@ -65,11 +65,24 @@ namespace QuanLyHocSinhApp
                 try
                 {
                     conn.Open();
-                    string query = "DELETE FROM HocSinh WHERE ID = @ID";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@ID", txtID.Text);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Xóa học sinh thành công.");
+                    // Bắt đầu giao dịch
+                    using (SqlTransaction transaction = conn.BeginTransaction())
+                    {
+                        // Xóa học sinh
+                        string queryDelete = "DELETE FROM HocSinh WHERE ID = @ID";
+                        SqlCommand cmdDelete = new SqlCommand(queryDelete, conn, transaction);
+                        cmdDelete.Parameters.AddWithValue("@ID", txtID.Text);
+                        cmdDelete.ExecuteNonQuery();
+
+                        // Lưu ID đã xóa vào DeletedIDs
+                        string queryInsertDeletedID = "INSERT INTO DeletedIDs (ID) VALUES (@ID)";
+                        SqlCommand cmdInsertDeletedID = new SqlCommand(queryInsertDeletedID, conn, transaction);
+                        cmdInsertDeletedID.Parameters.AddWithValue("@ID", txtID.Text);
+                        cmdInsertDeletedID.ExecuteNonQuery();
+
+                        transaction.Commit(); // Cam kết giao dịch
+                        MessageBox.Show("Xóa học sinh thành công.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -115,31 +128,76 @@ namespace QuanLyHocSinhApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            using (SqlConnection conn = GetConnection())
             {
-                using (SqlConnection conn = GetConnection())
+                try
                 {
-                    try
+                    conn.Open();
+
+                    // Kiểm tra DeletedIDs để lấy ID đã xóa
+                    string queryCheckDeletedIDs = "SELECT TOP 1 ID FROM DeletedIDs ORDER BY ID";
+                    SqlCommand cmdCheckDeletedIDs = new SqlCommand(queryCheckDeletedIDs, conn);
+                    object result = cmdCheckDeletedIDs.ExecuteScalar();
+                    int newID;
+
+                    if (result != null)
                     {
-                        conn.Open();
-                        string query = "INSERT INTO HocSinh (Ten, NgaySinh, LopHoc, SoDienThoai, DiaChi) VALUES (@Ten, @NgaySinh, @LopHoc, @SoDienThoai, @DiaChi)";
-                        SqlCommand cmd = new SqlCommand(query, conn);
-                        cmd.Parameters.AddWithValue("@ID", txtID.Text);
-                        cmd.Parameters.AddWithValue("@Ten", txtTen.Text);
-                        cmd.Parameters.AddWithValue("@NgaySinh", dtpNgaySinh.Value);
-                        cmd.Parameters.AddWithValue("@LopHoc", txtLopHoc.Text);
-                        cmd.Parameters.AddWithValue("@SoDienThoai", txtSoDienThoai.Text);
-                        cmd.Parameters.AddWithValue("@DiaChi", txtDiaChi.Text);
-                        cmd.ExecuteNonQuery();
-                        MessageBox.Show("Thêm học sinh thành công.");
+                        newID = Convert.ToInt32(result);
+
+                        // Xóa ID đã sử dụng từ DeletedIDs
+                        string queryDeleteFromDeletedIDs = "DELETE FROM DeletedIDs WHERE ID = @ID";
+                        SqlCommand cmdDeleteFromDeletedIDs = new SqlCommand(queryDeleteFromDeletedIDs, conn);
+                        cmdDeleteFromDeletedIDs.Parameters.AddWithValue("@ID", newID);
+                        cmdDeleteFromDeletedIDs.ExecuteNonQuery();
+
+                        // Cho phép IDENTITY_INSERT để thêm ID
+                        string querySetIdentityInsertOn = "SET IDENTITY_INSERT HocSinh ON";
+                        SqlCommand cmdSetIdentityInsertOn = new SqlCommand(querySetIdentityInsertOn, conn);
+                        cmdSetIdentityInsertOn.ExecuteNonQuery();
+
+                        // Thêm học sinh mới với ID cụ thể
+                        string queryInsert = "INSERT INTO HocSinh (ID, Ten, NgaySinh, LopHoc, SoDienThoai, DiaChi) VALUES (@ID, @Ten, @NgaySinh, @LopHoc, @SoDienThoai, @DiaChi)";
+                        SqlCommand cmdInsert = new SqlCommand(queryInsert, conn);
+                        cmdInsert.Parameters.AddWithValue("@ID", newID);
+                        cmdInsert.Parameters.AddWithValue("@Ten", txtTen.Text);
+                        cmdInsert.Parameters.AddWithValue("@NgaySinh", dtpNgaySinh.Value);
+                        cmdInsert.Parameters.AddWithValue("@LopHoc", txtLopHoc.Text);
+                        cmdInsert.Parameters.AddWithValue("@SoDienThoai", txtSoDienThoai.Text);
+                        cmdInsert.Parameters.AddWithValue("@DiaChi", txtDiaChi.Text);
+                        cmdInsert.ExecuteNonQuery();
+
+                        // Tắt IDENTITY_INSERT
+                        string querySetIdentityInsertOff = "SET IDENTITY_INSERT HocSinh OFF";
+                        SqlCommand cmdSetIdentityInsertOff = new SqlCommand(querySetIdentityInsertOff, conn);
+                        cmdSetIdentityInsertOff.ExecuteNonQuery();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MessageBox.Show("Lỗi khi thêm học sinh: " + ex.Message);
+                        // Tạo ID mới
+                        string queryMaxID = "SELECT ISNULL(MAX(ID), 0) + 1 FROM HocSinh";
+                        SqlCommand cmdMaxID = new SqlCommand(queryMaxID, conn);
+                        newID = Convert.ToInt32(cmdMaxID.ExecuteScalar());
+
+                        // Thêm học sinh mới với ID mới
+                        string queryInsert = "INSERT INTO HocSinh (Ten, NgaySinh, LopHoc, SoDienThoai, DiaChi) VALUES (@Ten, @NgaySinh, @LopHoc, @SoDienThoai, @DiaChi)";
+                        SqlCommand cmdInsert = new SqlCommand(queryInsert, conn);
+                        cmdInsert.Parameters.AddWithValue("@Ten", txtTen.Text);
+                        cmdInsert.Parameters.AddWithValue("@NgaySinh", dtpNgaySinh.Value);
+                        cmdInsert.Parameters.AddWithValue("@LopHoc", txtLopHoc.Text);
+                        cmdInsert.Parameters.AddWithValue("@SoDienThoai", txtSoDienThoai.Text);
+                        cmdInsert.Parameters.AddWithValue("@DiaChi", txtDiaChi.Text);
+                        cmdInsert.ExecuteNonQuery();
                     }
-                    finally
-                    {
-                        LoadData(); // Tải lại dữ liệu sau khi thêm mới
-                    }
+
+                    MessageBox.Show("Thêm học sinh thành công.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi thêm học sinh: " + ex.Message);
+                }
+                finally
+                {
+                    LoadData(); // Tải lại dữ liệu sau khi thêm mới
                 }
             }
         }
