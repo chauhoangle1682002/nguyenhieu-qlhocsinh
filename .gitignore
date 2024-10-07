@@ -1,0 +1,6 @@
+﻿# Bỏ qua thư mục .vs của Visual Studio
+.vs/
+
+# Bỏ qua các tệp cấu hình của nuget packages
+packages/
+packages.config

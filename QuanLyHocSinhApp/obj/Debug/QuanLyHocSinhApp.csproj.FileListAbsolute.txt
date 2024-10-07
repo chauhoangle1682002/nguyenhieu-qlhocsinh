@@ -1,0 +1,17 @@
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.csproj.AssemblyReference.cache
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.Form1.resources
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.Properties.Resources.resources
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.csproj.GenerateResource.cache
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.csproj.CoreCompileInputs.cache
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\QuanLyHocSinhApp.exe.config
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\QuanLyHocSinhApp.exe
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\QuanLyHocSinhApp.pdb
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHo.7838E48B.Up2Date
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.exe
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.pdb
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.DiemDanh.resources
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.LoginForm.resources
