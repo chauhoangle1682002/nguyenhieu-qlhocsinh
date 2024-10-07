@@ -262,5 +262,23 @@ namespace QuanLyHocSinhApp
                 MessageBox.Show("Vui lòng chọn học sinh để điểm danh.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+            // Khởi tạo lại LoginForm
+            LoginForm loginForm = new LoginForm();
+            loginForm.Show(); // Hiển thị LoginForm
+            this.Close(); // Đóng Form1
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            // Xác nhận trước khi thoát
+            var result = MessageBox.Show("Bạn có chắc chắn muốn thoát?", "Xác nhận thoát", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                Application.Exit(); // Thoát ứng dụng
+            }
+        }
     }
 }

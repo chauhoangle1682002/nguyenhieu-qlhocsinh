@@ -48,8 +48,6 @@ namespace QuanLyHocSinhApp
                 }
             }
         }
-
-
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -69,11 +67,11 @@ namespace QuanLyHocSinhApp
             // Kiểm tra thông tin đăng nhập
             if (CheckLogin(username, password))
             {
+                // Nếu đăng nhập thành công, mở Form1
                 MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                // Mở form chính sau khi đăng nhập thành công
-                this.Hide();
-                MainForm mainForm = new MainForm(); // Giả sử MainForm là form chính của ứng dụng
-                mainForm.Show();
+                Form1 mainForm = new Form1(); // Mở form chính
+                mainForm.Show(); // Hiện form chính
+                this.Hide(); // Ẩn LoginForm
             }
             else
             {
@@ -83,28 +81,14 @@ namespace QuanLyHocSinhApp
 
         private void btnRegister_Click(object sender, EventArgs e)
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["MyConnectionString"].ConnectionString;
+            // Mở form đăng ký
+            RegisterForm registerForm = new RegisterForm();
+            registerForm.ShowDialog(); // Sử dụng ShowDialog nếu muốn chờ đến khi đóng form
+        }
 
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                string query = "INSERT INTO Users (Username, Password, Role) VALUES (@Username, @Password, @Role)";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@Username", txtUsername.Text);
-                cmd.Parameters.AddWithValue("@Password", HashPassword(txtPassword.Text));  // Mã hóa mật khẩu
-                cmd.Parameters.AddWithValue("@Role", "HocSinh");
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
 
-                try
-                {
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Đăng ký thành công!");
-                    this.Close();  // Đóng form sau khi đăng ký thành công
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Lỗi khi đăng ký: " + ex.Message);
-                }
-            }
         }
     }
 }

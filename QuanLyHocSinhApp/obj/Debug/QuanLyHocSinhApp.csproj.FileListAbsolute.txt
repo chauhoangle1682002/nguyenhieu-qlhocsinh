@@ -15,3 +15,4 @@ C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHo
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonsoft.Json.dll
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonsoft.Json.xml
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.LoginForm.resources
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.RegisterForm.resources

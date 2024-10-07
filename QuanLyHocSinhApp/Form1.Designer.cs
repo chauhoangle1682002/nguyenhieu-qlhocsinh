@@ -48,6 +48,8 @@
             this.txtTimKiemID = new System.Windows.Forms.TextBox();
             this.btnTimKiem = new System.Windows.Forms.Button();
             this.btnDiemDanh = new System.Windows.Forms.Button();
+            this.btnLogout = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHocSinh)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,7 +58,7 @@
             this.dataGridViewHocSinh.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewHocSinh.Location = new System.Drawing.Point(12, 110);
             this.dataGridViewHocSinh.Name = "dataGridViewHocSinh";
-            this.dataGridViewHocSinh.Size = new System.Drawing.Size(1076, 218);
+            this.dataGridViewHocSinh.Size = new System.Drawing.Size(632, 218);
             this.dataGridViewHocSinh.TabIndex = 0;
             this.dataGridViewHocSinh.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewHocSinh_CellContentClick);
             // 
@@ -143,7 +145,7 @@
             // btnThem
             // 
             this.btnThem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThem.Location = new System.Drawing.Point(168, 580);
+            this.btnThem.Location = new System.Drawing.Point(13, 580);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(95, 29);
             this.btnThem.TabIndex = 11;
@@ -154,7 +156,7 @@
             // btnSua
             // 
             this.btnSua.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSua.Location = new System.Drawing.Point(417, 580);
+            this.btnSua.Location = new System.Drawing.Point(258, 580);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(92, 29);
             this.btnSua.TabIndex = 12;
@@ -165,7 +167,7 @@
             // btnXoa
             // 
             this.btnXoa.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnXoa.Location = new System.Drawing.Point(638, 580);
+            this.btnXoa.Location = new System.Drawing.Point(471, 580);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(94, 29);
             this.btnXoa.TabIndex = 13;
@@ -176,7 +178,7 @@
             // btnTaiDuLieu
             // 
             this.btnTaiDuLieu.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTaiDuLieu.Location = new System.Drawing.Point(854, 580);
+            this.btnTaiDuLieu.Location = new System.Drawing.Point(737, 580);
             this.btnTaiDuLieu.Name = "btnTaiDuLieu";
             this.btnTaiDuLieu.Size = new System.Drawing.Size(105, 29);
             this.btnTaiDuLieu.TabIndex = 14;
@@ -211,7 +213,7 @@
             // 
             // txtTimKiemID
             // 
-            this.txtTimKiemID.Location = new System.Drawing.Point(786, 42);
+            this.txtTimKiemID.Location = new System.Drawing.Point(322, 45);
             this.txtTimKiemID.Name = "txtTimKiemID";
             this.txtTimKiemID.Size = new System.Drawing.Size(187, 20);
             this.txtTimKiemID.TabIndex = 19;
@@ -219,7 +221,7 @@
             // btnTimKiem
             // 
             this.btnTimKiem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTimKiem.Location = new System.Drawing.Point(992, 42);
+            this.btnTimKiem.Location = new System.Drawing.Point(548, 42);
             this.btnTimKiem.Name = "btnTimKiem";
             this.btnTimKiem.Size = new System.Drawing.Size(96, 23);
             this.btnTimKiem.TabIndex = 20;
@@ -238,11 +240,35 @@
             this.btnDiemDanh.UseVisualStyleBackColor = true;
             this.btnDiemDanh.Click += new System.EventHandler(this.button1_Click_3);
             // 
+            // btnLogout
+            // 
+            this.btnLogout.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLogout.Location = new System.Drawing.Point(943, 26);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(121, 39);
+            this.btnLogout.TabIndex = 22;
+            this.btnLogout.Text = "Đăng Xuất ";
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Location = new System.Drawing.Point(987, 580);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(84, 29);
+            this.btnExit.TabIndex = 23;
+            this.btnExit.Text = "Thoát ";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 621);
+            this.Controls.Add(this.btnExit);
+            this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnDiemDanh);
             this.Controls.Add(this.btnTimKiem);
             this.Controls.Add(this.txtTimKiemID);
@@ -293,6 +319,8 @@
         private System.Windows.Forms.TextBox txtTimKiemID;
         private System.Windows.Forms.Button btnTimKiem;
         private System.Windows.Forms.Button btnDiemDanh;
+        private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.Button btnExit;
     }
 }
 
