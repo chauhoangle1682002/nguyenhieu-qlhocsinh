@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{735DADDC-9314-4A35-AFAD-FCBD0B1B226C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		QLHSDB.sql = QLHSDB.sql
 	EndProjectSection
 EndProject
 Global
