@@ -16,3 +16,4 @@ C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonso
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\bin\Debug\Newtonsoft.Json.xml
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.LoginForm.resources
 C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.RegisterForm.resources
+C:\Users\admin\source\repos\QuanLyHocSinhApp\QuanLyHocSinhApp\obj\Debug\QuanLyHocSinhApp.FormDiem.resources

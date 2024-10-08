@@ -50,6 +50,7 @@
             this.btnDiemDanh = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
+            this.btnQuanLyDiem = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHocSinh)).BeginInit();
             this.SuspendLayout();
             // 
@@ -262,11 +263,23 @@
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
+            // btnQuanLyDiem
+            // 
+            this.btnQuanLyDiem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnQuanLyDiem.Location = new System.Drawing.Point(943, 101);
+            this.btnQuanLyDiem.Name = "btnQuanLyDiem";
+            this.btnQuanLyDiem.Size = new System.Drawing.Size(121, 43);
+            this.btnQuanLyDiem.TabIndex = 24;
+            this.btnQuanLyDiem.Text = "Quản Lý Điểm";
+            this.btnQuanLyDiem.UseVisualStyleBackColor = true;
+            this.btnQuanLyDiem.Click += new System.EventHandler(this.button1_Click_2);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1100, 621);
+            this.Controls.Add(this.btnQuanLyDiem);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnDiemDanh);
@@ -321,6 +334,7 @@
         private System.Windows.Forms.Button btnDiemDanh;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button btnQuanLyDiem;
     }
 }
 

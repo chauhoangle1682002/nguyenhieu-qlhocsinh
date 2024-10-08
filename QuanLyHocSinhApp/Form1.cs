@@ -338,5 +338,11 @@ namespace QuanLyHocSinhApp
                 Application.Exit(); // Thoát ứng dụng
             }
         }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            FormDiem formDiem = new FormDiem();
+            formDiem.ShowDialog();
+        }
     }
 }
