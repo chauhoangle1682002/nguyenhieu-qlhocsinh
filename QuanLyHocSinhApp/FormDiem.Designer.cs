@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.dataGridViewDiem = new System.Windows.Forms.DataGridView();
-            this.comboBoxHocSinh = new System.Windows.Forms.ComboBox();
             this.txtMonHoc = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,27 +39,19 @@
             this.btnSuaDiem = new System.Windows.Forms.Button();
             this.btnXoaDiem = new System.Windows.Forms.Button();
             this.textBoxHocSinh = new System.Windows.Forms.TextBox();
+            this.comboBoxHocSinh = new System.Windows.Forms.ComboBox();
+            this.btnLoadDiem = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDiem)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewDiem
             // 
             this.dataGridViewDiem.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewDiem.Location = new System.Drawing.Point(215, 12);
+            this.dataGridViewDiem.Location = new System.Drawing.Point(113, 12);
             this.dataGridViewDiem.Name = "dataGridViewDiem";
-            this.dataGridViewDiem.Size = new System.Drawing.Size(456, 256);
+            this.dataGridViewDiem.Size = new System.Drawing.Size(558, 206);
             this.dataGridViewDiem.TabIndex = 0;
             this.dataGridViewDiem.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDiem_CellContentClick);
-            // 
-            // comboBoxHocSinh
-            // 
-            this.comboBoxHocSinh.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxHocSinh.FormattingEnabled = true;
-            this.comboBoxHocSinh.Location = new System.Drawing.Point(12, 12);
-            this.comboBoxHocSinh.Name = "comboBoxHocSinh";
-            this.comboBoxHocSinh.Size = new System.Drawing.Size(197, 21);
-            this.comboBoxHocSinh.TabIndex = 1;
-            this.comboBoxHocSinh.SelectedIndexChanged += new System.EventHandler(this.comboBoxHocSinh_SelectedIndexChanged);
             // 
             // txtMonHoc
             // 
@@ -149,17 +140,39 @@
             // 
             // textBoxHocSinh
             // 
-            this.textBoxHocSinh.Location = new System.Drawing.Point(13, 58);
+            this.textBoxHocSinh.Location = new System.Drawing.Point(10, 12);
             this.textBoxHocSinh.Name = "textBoxHocSinh";
-            this.textBoxHocSinh.Size = new System.Drawing.Size(196, 20);
+            this.textBoxHocSinh.Size = new System.Drawing.Size(65, 20);
             this.textBoxHocSinh.TabIndex = 11;
             this.textBoxHocSinh.TextChanged += new System.EventHandler(this.textBoxHocSinh_TextChanged);
+            // 
+            // comboBoxHocSinh
+            // 
+            this.comboBoxHocSinh.FormattingEnabled = true;
+            this.comboBoxHocSinh.Location = new System.Drawing.Point(10, 62);
+            this.comboBoxHocSinh.Name = "comboBoxHocSinh";
+            this.comboBoxHocSinh.Size = new System.Drawing.Size(97, 21);
+            this.comboBoxHocSinh.TabIndex = 12;
+            this.comboBoxHocSinh.SelectedIndexChanged += new System.EventHandler(this.comboBoxHocSinh_SelectedIndexChanged);
+            // 
+            // btnLoadDiem
+            // 
+            this.btnLoadDiem.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLoadDiem.Location = new System.Drawing.Point(113, 224);
+            this.btnLoadDiem.Name = "btnLoadDiem";
+            this.btnLoadDiem.Size = new System.Drawing.Size(113, 29);
+            this.btnLoadDiem.TabIndex = 13;
+            this.btnLoadDiem.Text = "Tải Dữ Liệu";
+            this.btnLoadDiem.UseVisualStyleBackColor = true;
+            this.btnLoadDiem.Click += new System.EventHandler(this.button1_Click);
             // 
             // FormDiem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(680, 473);
+            this.Controls.Add(this.btnLoadDiem);
+            this.Controls.Add(this.comboBoxHocSinh);
             this.Controls.Add(this.textBoxHocSinh);
             this.Controls.Add(this.btnXoaDiem);
             this.Controls.Add(this.btnSuaDiem);
@@ -170,7 +183,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtMonHoc);
-            this.Controls.Add(this.comboBoxHocSinh);
             this.Controls.Add(this.dataGridViewDiem);
             this.Name = "FormDiem";
             this.Text = "FormDiem";
@@ -183,7 +195,6 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridViewDiem;
-        private System.Windows.Forms.ComboBox comboBoxHocSinh;
         private System.Windows.Forms.TextBox txtMonHoc;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -194,5 +205,7 @@
         private System.Windows.Forms.Button btnSuaDiem;
         private System.Windows.Forms.Button btnXoaDiem;
         private System.Windows.Forms.TextBox textBoxHocSinh;
+        private System.Windows.Forms.ComboBox comboBoxHocSinh;
+        private System.Windows.Forms.Button btnLoadDiem;
     }
 }

@@ -20,39 +20,48 @@ namespace QuanLyHocSinhApp
         }
         private void FormDiem_Load(object sender, EventArgs e)
         {
-            LoadHocSinhToTextBox(); // Tải danh sách học sinh vào ComboBox
-
-            // Kiểm tra số lượng mục trong ComboBox
-            MessageBox.Show("Số lượng mục trong ComboBox: " + comboBoxHocSinh.Items.Count);
-
-            // Duyệt qua các mục trong ComboBox để in ra
-            foreach (var item in comboBoxHocSinh.Items)
-            {
-                MessageBox.Show(item.ToString());
-            }
-
+            LoadHocSinhToTextBox();
             LoadData();
             LoadDiemData();// Tải danh sách điểm vào DataGridView
+            LoadHocSinhToComboBox(); // Tải danh sách học sinh vào ComboBox
+            LoadHocSinhWithDiem();
+            btnLoadDiem.Click += button1_Click; // Đăng ký sự kiện Click
+        }
+        private void LoadHocSinhToComboBox()
+        {
+            using (SqlConnection conn = GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    string query = "SELECT ID, Ten FROM HocSinh";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        // Thêm tên học sinh vào ComboBox
+                        comboBoxHocSinh.Items.Add(new
+                        {
+                            ID = reader["ID"],
+                            Ten = reader["Ten"]
+                        });
+                    }
+
+                    // Đặt tên hiển thị cho ComboBox
+                    comboBoxHocSinh.DisplayMember = "Ten";
+                    comboBoxHocSinh.ValueMember = "ID";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải danh sách học sinh: " + ex.Message);
+                }
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
-        }
-
-        private void comboBoxHocSinh_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxHocSinh.SelectedItem != null)
-            {
-                // Lấy giá trị ID của học sinh được chọn
-                DataRowView selectedRow = comboBoxHocSinh.SelectedItem as DataRowView;
-                if (selectedRow != null)
-                {
-                    int hocSinhID = (int)selectedRow["ID"];
-                    string tenHocSinh = selectedRow["Ten"].ToString();
-                    MessageBox.Show("Học sinh được chọn: " + tenHocSinh + " - ID: " + hocSinhID);
-                }
-            }
         }
 
         private void LoadHocSinhToTextBox()
@@ -81,6 +90,37 @@ namespace QuanLyHocSinhApp
                 }
             }
         }
+        private void LoadHocSinhWithDiem()
+        {
+            using (SqlConnection conn = GetConnection())
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT HocSinh.ID AS HocSinhID, HocSinh.Ten, Diem.MonHoc, Diem.DiemSo, Diem.GhiChu 
+                FROM Diem 
+                INNER JOIN HocSinh ON Diem.HocSinhID = HocSinh.ID";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                    // Hiển thị tên các cột để kiểm tra
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        Console.WriteLine(column.ColumnName);
+                    }
+
+                    // Liên kết dữ liệu với DataGridView
+                    dataGridViewDiem.DataSource = dataTable;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tải danh sách học sinh có điểm: " + ex.Message);
+                }
+            }
+        }
 
         private SqlConnection GetConnection()
         {
@@ -95,14 +135,11 @@ namespace QuanLyHocSinhApp
                 try
                 {
                     conn.Open();
-
-                    // Câu truy vấn lấy điểm từ bảng Diem, kèm theo tên học sinh từ bảng HocSinh
-                    string query = "SELECT Diem.ID, HocSinh.Ten, Diem.MonHoc, Diem.DiemSo, Diem.GhiChu FROM Diem INNER JOIN HocSinh ON Diem.HocSinhID = HocSinh.ID";
+                    string query = "SELECT Diem.ID, Diem.HocSinhID, HocSinh.Ten, Diem.MonHoc, Diem.DiemSo, Diem.GhiChu FROM Diem INNER JOIN HocSinh ON Diem.HocSinhID = HocSinh.ID";
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
 
-                    // Liên kết dữ liệu với DataGridView
                     dataGridViewDiem.DataSource = dataTable;
                 }
                 catch (Exception ex)
@@ -111,6 +148,7 @@ namespace QuanLyHocSinhApp
                 }
             }
         }
+        // Lấy ID học sinh khi người dùng chọn học sinh từ ComboBox
         private int GetHocSinhIDFromTextBox()
         {
             using (SqlConnection conn = GetConnection())
@@ -140,8 +178,6 @@ namespace QuanLyHocSinhApp
                 }
             }
         }
-
-
         private void LoadHocSinh()
         {
             using (SqlConnection conn = GetConnection())
@@ -154,11 +190,6 @@ namespace QuanLyHocSinhApp
                     SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
                     DataTable dataTable = new DataTable();
                     adapter.Fill(dataTable);
-
-                    // Liên kết dữ liệu với ComboBox
-                    comboBoxHocSinh.DataSource = dataTable;
-                    comboBoxHocSinh.DisplayMember = "Ten";  // Hiển thị tên học sinh
-                    comboBoxHocSinh.ValueMember = "ID";     // Giá trị là ID của học sinh
                 }
                 catch (Exception ex)
                 {
@@ -166,75 +197,51 @@ namespace QuanLyHocSinhApp
                 }
             }
         }
-
         private void btnThemDiem_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(textBoxHocSinh.Text) && !string.IsNullOrWhiteSpace(txtMonHoc.Text))
+            int hocSinhID;
+            if (int.TryParse(textBoxHocSinh.Text, out hocSinhID)) // Kiểm tra ID hợp lệ
             {
-                int hocSinhID;
-                if (int.TryParse(textBoxHocSinh.Text, out hocSinhID))
+                // Lấy các thông tin khác
+                string monHoc = txtMonHoc.Text;
+                float diemSo;
+
+                if (float.TryParse(txtDiemSo.Text, out diemSo)) // Kiểm tra điểm có phải là số
                 {
-                    string monHoc = txtMonHoc.Text; // Nhập từ TextBox
-                    float diemSo;
+                    string ghiChu = txtGhiChu.Text;
 
-                    if (float.TryParse(txtDiemSo.Text, out diemSo))
+                    using (SqlConnection conn = GetConnection())
                     {
-                        string ghiChu = txtGhiChu.Text;
-
-                        using (SqlConnection conn = GetConnection())
+                        try
                         {
-                            try
-                            {
-                                conn.Open();
+                            conn.Open();
 
-                                // Kiểm tra xem môn học đã tồn tại chưa
-                                string checkMonHocQuery = "SELECT COUNT(*) FROM MonHoc WHERE TenMonHoc = @TenMonHoc";
-                                SqlCommand checkCmd = new SqlCommand(checkMonHocQuery, conn);
-                                checkCmd.Parameters.AddWithValue("@TenMonHoc", monHoc);
-                                int count = (int)checkCmd.ExecuteScalar();
+                            // Thêm điểm vào cơ sở dữ liệu
+                            string insertDiemQuery = "INSERT INTO Diem (HocSinhID, MonHoc, DiemSo, GhiChu) VALUES (@HocSinhID, @MonHoc, @DiemSo, @GhiChu)";
+                            SqlCommand insertDiemCmd = new SqlCommand(insertDiemQuery, conn);
+                            insertDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
+                            insertDiemCmd.Parameters.AddWithValue("@MonHoc", monHoc);
+                            insertDiemCmd.Parameters.AddWithValue("@DiemSo", diemSo);
+                            insertDiemCmd.Parameters.AddWithValue("@GhiChu", ghiChu);
 
-                                // Nếu môn học chưa tồn tại, thêm vào bảng MonHoc
-                                if (count == 0)
-                                {
-                                    string insertMonHocQuery = "INSERT INTO MonHoc (TenMonHoc) VALUES (@TenMonHoc)";
-                                    SqlCommand insertMonHocCmd = new SqlCommand(insertMonHocQuery, conn);
-                                    insertMonHocCmd.Parameters.AddWithValue("@TenMonHoc", monHoc);
-                                    insertMonHocCmd.ExecuteNonQuery();
-                                }
-
-                                // Thêm điểm vào bảng Diem
-                                string insertDiemQuery = "INSERT INTO Diem (HocSinhID, MonHoc, DiemSo, GhiChu) VALUES (@HocSinhID, @MonHoc, @DiemSo, @GhiChu)";
-                                SqlCommand insertDiemCmd = new SqlCommand(insertDiemQuery, conn);
-                                insertDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
-                                insertDiemCmd.Parameters.AddWithValue("@MonHoc", monHoc);
-                                insertDiemCmd.Parameters.AddWithValue("@DiemSo", diemSo);
-                                insertDiemCmd.Parameters.AddWithValue("@GhiChu", ghiChu);
-
-                                insertDiemCmd.ExecuteNonQuery();
-                                MessageBox.Show("Thêm điểm thành công!");
-
-                                // Gọi phương thức để tải lại dữ liệu vào DataGridView
-                                LoadDiemData();
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show("Lỗi khi thêm điểm: " + ex.Message);
-                            }
+                            insertDiemCmd.ExecuteNonQuery();
+                            MessageBox.Show("Thêm điểm thành công!");
+                            LoadHocSinhWithDiem(); // Cập nhật lại DataGridView sau khi thêm điểm
                         }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Vui lòng nhập điểm số hợp lệ.");
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Lỗi khi thêm điểm: " + ex.Message);
+                        }
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Vui lòng nhập ID học sinh hợp lệ.");
+                    MessageBox.Show("Vui lòng nhập điểm hợp lệ.");
                 }
             }
             else
             {
-                MessageBox.Show("Vui lòng nhập ID học sinh và tên môn học.");
+                MessageBox.Show("ID học sinh không hợp lệ. Vui lòng nhập lại.");
             }
         }
 
@@ -264,51 +271,83 @@ namespace QuanLyHocSinhApp
 
         private void btnSuaDiem_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = GetConnection())
+            if (dataGridViewDiem.SelectedRows.Count > 0)
             {
-                try
-                {
-                    conn.Open();
-                    string query = @"
-                UPDATE Diem 
-                SET MonHoc = @MonHoc, DiemSo = @DiemSo, GhiChu = @GhiChu
-                WHERE ID = @DiemID";
+                DataGridViewRow row = dataGridViewDiem.SelectedRows[0];
+                int diemID = int.Parse(row.Cells["HocSinhID"].Value.ToString());
+                int hocSinhID = int.Parse(textBoxHocSinh.Text);
 
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@DiemID", textBoxHocSinh.Text);
-                    cmd.Parameters.AddWithValue("@MonHoc", txtMonHoc.Text);
-                    cmd.Parameters.AddWithValue("@DiemSo", txtDiemSo.Text);
-                    cmd.Parameters.AddWithValue("@GhiChu", txtGhiChu.Text);
+                string monHoc = txtMonHoc.Text;
+                float diemSo;
 
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Cập nhật điểm thành công.");
-                    LoadDiemData();  // Tải lại dữ liệu sau khi sửa
-                }
-                catch (Exception ex)
+                if (float.TryParse(txtDiemSo.Text, out diemSo))
                 {
-                    MessageBox.Show("Lỗi khi cập nhật điểm: " + ex.Message);
+                    string ghiChu = txtGhiChu.Text;
+
+                    using (SqlConnection conn = GetConnection())
+                    {
+                        try
+                        {
+                            conn.Open();
+                            string updateDiemQuery = "UPDATE Diem SET MonHoc = @MonHoc, DiemSo = @DiemSo, GhiChu = @GhiChu WHERE ID = @DiemID AND HocSinhID = @HocSinhID";
+                            SqlCommand updateDiemCmd = new SqlCommand(updateDiemQuery, conn);
+                            updateDiemCmd.Parameters.AddWithValue("@DiemID", diemID);
+                            updateDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
+                            updateDiemCmd.Parameters.AddWithValue("@MonHoc", monHoc);
+                            updateDiemCmd.Parameters.AddWithValue("@DiemSo", diemSo);
+                            updateDiemCmd.Parameters.AddWithValue("@GhiChu", ghiChu);
+
+                            updateDiemCmd.ExecuteNonQuery();
+                            MessageBox.Show("Sửa điểm thành công!");
+                            LoadDiemData();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Lỗi khi sửa điểm: " + ex.Message);
+                        }
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Vui lòng nhập điểm hợp lệ.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một dòng để sửa.");
             }
         }
         private void btnXoaDiem_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = GetConnection())
+            if (dataGridViewDiem.SelectedRows.Count > 0)
             {
-                try
-                {
-                    conn.Open();
-                    string query = "DELETE FROM Diem WHERE ID = @DiemID";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@DiemID", textBoxHocSinh.Text);  // Lấy giá trị từ TextBox
+                DataGridViewRow row = dataGridViewDiem.SelectedRows[0];
+                int diemID = int.Parse(row.Cells["ID"].Value.ToString());
+                int hocSinhID = int.Parse(textBoxHocSinh.Text);
 
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Xóa điểm thành công.");
-                    LoadDiemData();  // Tải lại dữ liệu sau khi xóa
-                }
-                catch (Exception ex)
+                using (SqlConnection conn = GetConnection())
                 {
-                    MessageBox.Show("Lỗi khi xóa điểm: " + ex.Message);
+                    try
+                    {
+                        conn.Open();
+                        string deleteDiemQuery = "DELETE FROM Diem WHERE ID = @DiemID AND HocSinhID = @HocSinhID";
+                        SqlCommand deleteDiemCmd = new SqlCommand(deleteDiemQuery, conn);
+                        deleteDiemCmd.Parameters.AddWithValue("@DiemID", diemID);
+                        deleteDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
+
+                        deleteDiemCmd.ExecuteNonQuery();
+                        MessageBox.Show("Xóa điểm thành công!");
+                        LoadDiemData();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Lỗi khi xóa điểm: " + ex.Message);
+                    }
                 }
+            }
+            else
+            {
+                MessageBox.Show("Vui lòng chọn một dòng để xóa.");
             }
         }
 
@@ -318,9 +357,9 @@ namespace QuanLyHocSinhApp
             {
                 DataGridViewRow row = dataGridViewDiem.Rows[e.RowIndex];
 
-                textBoxHocSinh.Text = row.Cells["ID"].Value.ToString();
+                txtDiemSo.Text = row.Cells["DiemSo"].Value.ToString(); // Lấy giá trị từ cột DiemSo
+                textBoxHocSinh.Text = row.Cells["Ten"].Value.ToString(); // Tên học sinh
                 txtMonHoc.Text = row.Cells["MonHoc"].Value.ToString();
-                txtDiemSo.Text = row.Cells["DiemSo"].Value.ToString();
                 txtGhiChu.Text = row.Cells["GhiChu"].Value.ToString();
             }
         }
@@ -328,6 +367,38 @@ namespace QuanLyHocSinhApp
         private void textBoxHocSinh_TextChanged(object sender, EventArgs e)
         {
 
+        }
+        private bool CheckHocSinhIDExists(int hocSinhID)
+        {
+            using (SqlConnection conn = GetConnection()) // Sử dụng kết nối SQL của bạn
+            {
+                conn.Open();
+                // Truy vấn kiểm tra sự tồn tại của HocSinhID trong bảng HocSinh
+                string query = "SELECT COUNT(*) FROM HocSinh WHERE ID = @HocSinhID";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
+
+                // Thực hiện truy vấn và lấy kết quả
+                int count = (int)cmd.ExecuteScalar();
+
+                // Trả về true nếu ID tồn tại, ngược lại false
+                return count > 0;
+            }
+        }
+
+        private void comboBoxHocSinh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Khi người dùng chọn một học sinh, ghi ID vào textBoxHocSinh
+            var selectedItem = comboBoxHocSinh.SelectedItem;
+            if (selectedItem != null)
+            {
+                textBoxHocSinh.Text = ((dynamic)selectedItem).ID.ToString(); // Ghi ID vào TextBox
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadHocSinhWithDiem(); // Gọi hàm tải dữ liệu
         }
     }
 }
