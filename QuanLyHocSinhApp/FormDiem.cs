@@ -274,9 +274,12 @@ namespace QuanLyHocSinhApp
             if (dataGridViewDiem.SelectedRows.Count > 0)
             {
                 DataGridViewRow row = dataGridViewDiem.SelectedRows[0];
-                int diemID = int.Parse(row.Cells["HocSinhID"].Value.ToString());
-                int hocSinhID = int.Parse(textBoxHocSinh.Text);
 
+                // Lấy ID điểm từ cột "ID" (hoặc tên cột khác nếu bạn đã đổi)
+                int diemID = int.Parse(row.Cells["ID"].Value.ToString()); // Đảm bảo cột này tồn tại
+                int hocSinhID = int.Parse(row.Cells["HocSinhID"].Value.ToString()); // Lấy HocSinhID từ dòng đã chọn
+
+                // Lấy thông tin từ các ô nhập liệu
                 string monHoc = txtMonHoc.Text;
                 float diemSo;
 
@@ -289,17 +292,16 @@ namespace QuanLyHocSinhApp
                         try
                         {
                             conn.Open();
-                            string updateDiemQuery = "UPDATE Diem SET MonHoc = @MonHoc, DiemSo = @DiemSo, GhiChu = @GhiChu WHERE ID = @DiemID AND HocSinhID = @HocSinhID";
+                            string updateDiemQuery = "UPDATE Diem SET MonHoc = @MonHoc, DiemSo = @DiemSo, GhiChu = @GhiChu WHERE ID = @DiemID";
                             SqlCommand updateDiemCmd = new SqlCommand(updateDiemQuery, conn);
                             updateDiemCmd.Parameters.AddWithValue("@DiemID", diemID);
-                            updateDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
                             updateDiemCmd.Parameters.AddWithValue("@MonHoc", monHoc);
                             updateDiemCmd.Parameters.AddWithValue("@DiemSo", diemSo);
                             updateDiemCmd.Parameters.AddWithValue("@GhiChu", ghiChu);
 
                             updateDiemCmd.ExecuteNonQuery();
                             MessageBox.Show("Sửa điểm thành công!");
-                            LoadDiemData();
+                            LoadDiemData(); // Tải lại dữ liệu sau khi sửa
                         }
                         catch (Exception ex)
                         {
@@ -322,22 +324,23 @@ namespace QuanLyHocSinhApp
             if (dataGridViewDiem.SelectedRows.Count > 0)
             {
                 DataGridViewRow row = dataGridViewDiem.SelectedRows[0];
-                int diemID = int.Parse(row.Cells["ID"].Value.ToString());
-                int hocSinhID = int.Parse(textBoxHocSinh.Text);
+
+                // Lấy ID điểm từ cột "ID" (hoặc tên cột khác nếu bạn đã đổi)
+                int diemID = int.Parse(row.Cells["ID"].Value.ToString()); // Đảm bảo cột này tồn tại
+                int hocSinhID = int.Parse(row.Cells["HocSinhID"].Value.ToString()); // Lấy HocSinhID từ dòng đã chọn
 
                 using (SqlConnection conn = GetConnection())
                 {
                     try
                     {
                         conn.Open();
-                        string deleteDiemQuery = "DELETE FROM Diem WHERE ID = @DiemID AND HocSinhID = @HocSinhID";
+                        string deleteDiemQuery = "DELETE FROM Diem WHERE ID = @DiemID";
                         SqlCommand deleteDiemCmd = new SqlCommand(deleteDiemQuery, conn);
                         deleteDiemCmd.Parameters.AddWithValue("@DiemID", diemID);
-                        deleteDiemCmd.Parameters.AddWithValue("@HocSinhID", hocSinhID);
 
                         deleteDiemCmd.ExecuteNonQuery();
                         MessageBox.Show("Xóa điểm thành công!");
-                        LoadDiemData();
+                        LoadDiemData(); // Tải lại dữ liệu sau khi xóa
                     }
                     catch (Exception ex)
                     {
@@ -357,11 +360,13 @@ namespace QuanLyHocSinhApp
             {
                 DataGridViewRow row = dataGridViewDiem.Rows[e.RowIndex];
 
-                txtDiemSo.Text = row.Cells["DiemSo"].Value.ToString(); // Lấy giá trị từ cột DiemSo
-                textBoxHocSinh.Text = row.Cells["Ten"].Value.ToString(); // Tên học sinh
+                // Cập nhật các ô nhập liệu với dữ liệu từ dòng đã chọn
+                txtDiemSo.Text = row.Cells["DiemSo"].Value.ToString();
+                textBoxHocSinh.Text = row.Cells["HocSinhID"].Value.ToString(); // Hiển thị HocSinhID
                 txtMonHoc.Text = row.Cells["MonHoc"].Value.ToString();
                 txtGhiChu.Text = row.Cells["GhiChu"].Value.ToString();
             }
+            LoadDiemData(); // Cập nhật lại DataGridView sau khi sửa hoặc xóa thành công
         }
 
         private void textBoxHocSinh_TextChanged(object sender, EventArgs e)
